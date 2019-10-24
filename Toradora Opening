@@ -1,0 +1,350 @@
+//music
+import processing.sound.*;
+
+SoundFile file;
+FFT fft;
+String audioName = "Toradora.mp3";
+String path;
+
+//bars iNSYNC with the music
+int bands = 8;
+
+float smoothingFactor = 0.2;
+float[] sum = new float[bands];
+
+int scale = 1;
+float barWidth;
+
+float hue = 0;
+float incr = 1;
+float hueIncr = 1;
+
+//pics
+PImage img1;
+PImage img2;
+PImage img3;
+PImage img4;
+PImage img5;
+PImage img6;
+PImage img7;
+PImage img8;
+PImage img9;
+PImage img10;
+PImage img11;
+PImage img12;
+PImage img13;
+PImage img14;
+PImage img15;
+PImage img16;
+PImage img17;
+PImage img18;
+PImage img19;
+PImage img20;
+PImage img21;
+PImage img22;
+PImage img23;
+
+float picX;
+float picY;
+
+//shake
+float b = 0.0;
+float noiseScale = 50;
+
+//scale
+float a = 0.0;
+float s = 5.0;
+
+//zoom
+float x, y;
+float dim = 160.0;
+
+//getting pics & effects to move in time witht the music
+int timeUnit = 0;
+int currentState = 0;
+
+//bounce off wall
+int posX = 5; //initial position
+int posY = 100;
+int velX = 4; //Either posX and posX OR velX and velY must be two different variables or the ball will bounce in a line
+int velY = 6;
+
+void setup() {
+  fullScreen(P3D);
+  path = sketchPath(audioName);
+  file = new SoundFile(this, path);
+  
+  barWidth = width/float(bands);
+
+  
+  fft = new FFT(this, bands);
+  
+  fft.input(file);
+  
+  //pics
+  img1 = loadImage("BestRyuji.png");
+  img2 = loadImage("BestTaiga.png");
+  img3 = loadImage("Betterletters1.png");
+  img4 = loadImage("Betterletters2.png");
+  img5 = loadImage("Betterletters3.png");
+  img6 = loadImage("Betterletters4.png");
+  img7 = loadImage("letters5.png");
+  img8 = loadImage("BestMinori.png");
+  img9 = loadImage("BestKitamura.png");
+  img10 = loadImage("BestAmi.png");
+  img11 = loadImage("ToradoraTitle.png");
+  img12 = loadImage("Bettertaiga2.png");
+  img13 = loadImage("Betterryuji2.png");
+  img14 = loadImage("Betterami2.png");
+  img15 = loadImage("Betterminori2.png");
+  img16 = loadImage("Betterkitamura2.png");
+  img17 = loadImage("toradroaallcharacters.jpg");
+  img18 = loadImage("BestYasuko.png");
+  img19 = loadImage("BestYuri.png");
+  img20 = loadImage("BestInko.png");
+  img21 = loadImage("allcharacters1.jpg");
+  img22 = loadImage("test.jpg");
+  img23 = loadImage("betterallcharacters3.jpg");
+  
+  
+  imageMode(CENTER);
+  
+  picX = width/2;
+  picY = height/2;
+  
+  file.play();
+}
+  
+void draw () {
+  background(255);
+  timeUnit = millis();
+  textAlign(CENTER);
+  textSize(25);
+  
+  //scale
+  a = a + 0.04;
+  s = cos(a)*2;
+  
+  //zoom
+   x = x + 0.8;
+  
+  //barz
+  fill(255, 2, 150);
+  noStroke();
+
+  // Perform the analysis
+  fft.analyze();
+
+  for (int i = 0; i < bands; i++) {
+    sum[i] += (fft.spectrum[i] - sum[i]) * smoothingFactor;
+
+    rect(i*barWidth, height, barWidth, -sum[i]*height*scale); }
+    
+  /// "1000 * number of seconds"
+  if (millis() > 1000 * 0) { currentState = 0; }
+  if (millis() > 1000 * 5) { currentState = 1; }
+  if (millis() > 1000 * 12) { currentState = 2; }
+  if (millis() > 1000 * 20) { currentState = 3; }
+  if (millis() > 1000 * 22) { currentState = 4; }
+  if (millis() > 1000 * 26) { currentState = 5; }
+  if (millis() > 1000 * 28) { currentState = 6; }
+  if (millis() > 1000 * 30) { currentState = 7; }
+  if (millis() > 1000 * 32) { currentState = 8; }
+  if (millis() > 1000 * 40) { currentState = 9; }
+  if (millis() > 1000 * 45) { currentState = 10; }
+  if (millis() > 1000 * 50) { currentState = 11; }
+  if (millis() > 1000 * 58) { currentState = 12; }
+  if (millis() > 1000 * 58.5) { currentState = 13; }
+  if (millis() > 1000 * 59) { currentState = 14; }
+  if (millis() > 1000 * 59.5) { currentState = 15; }
+  if (millis() > 1000 * 60) { currentState = 16; }
+  if (millis() > 1000 * 60.5) { currentState = 17; }
+  if (millis() > 1000 * 61) { currentState = 18; }
+  if (millis() > 1000 * 65) { currentState = 19; }
+  if (millis() > 1000 * 69) { currentState = 20; }
+  if (millis() > 1000 * 75) { currentState = 21; }
+  if (millis() > 1000 * 81) { currentState = 22; }
+  if (millis() > 1000 * 93) { currentState = 23; }
+  /// Etc...
+  
+  /// Draw the corresponding state
+  if (currentState == 0) { drawScene00(); }
+  if (currentState == 1) { drawScene01(); }
+  if (currentState == 2) { drawScene02(); }
+  if (currentState == 3) { drawScene03(); }
+  if (currentState == 4) { drawScene04(); }
+  if (currentState == 5) { drawScene05(); }
+  if (currentState == 6) { drawScene06(); }
+  if (currentState == 7) { drawScene07(); }
+  if (currentState == 8) { drawScene08(); }
+  if (currentState == 9) { drawScene09(); }
+  if (currentState == 10) { drawScene10(); }
+  if (currentState == 11) { drawScene11(); }
+  if (currentState == 12) { drawScene12(); }
+  if (currentState == 13) { drawScene13(); }
+  if (currentState == 14) { drawScene14(); }
+  if (currentState == 15) { drawScene15(); }
+  if (currentState == 16) { drawScene16(); }
+  if (currentState == 17) { drawScene17(); }
+  if (currentState == 18) { drawScene18(); }
+  if (currentState == 19) { drawScene19(); }
+  if (currentState == 20) { drawScene20(); }
+  if (currentState == 21) { drawScene21(); }
+  if (currentState == 22) { drawScene22(); }
+  if (currentState == 23) { drawScene23(); }
+  /// Etc...
+}  
+void drawScene00() {
+    file.play();
+}
+void drawScene01() {
+  pushMatrix();
+  rotateY(frameCount*0.01);
+  image(img1, width/2,height/2);
+  popMatrix();
+}
+void drawScene02() {
+  pushMatrix();
+  rotateY(frameCount*0.01);
+  image(img2, width/2,height/2);
+  popMatrix();
+}
+void drawScene03() {
+  pushMatrix();
+  translate(x, height/2-dim/2);
+  image(img3, dim, dim);
+  popMatrix();
+}
+void drawScene04() {
+  pushMatrix();
+  translate(x, height/2-dim/2);
+  image(img4, dim, dim);
+  popMatrix();
+}
+void drawScene05() {
+  pushMatrix();
+  translate(x, height/2-dim/2);
+  image(img5, dim, dim);
+  popMatrix();
+}
+void drawScene06() {
+  pushMatrix();
+  translate(x, height/2-dim/2);
+  image(img6, dim, dim);
+  popMatrix();
+}
+void drawScene07() {
+  pushMatrix();
+  translate(x, height/2-dim/2);
+  image(img7, dim, dim);
+  popMatrix();
+}
+void drawScene08() {
+  pushMatrix();
+  rotateY(frameCount*0.02);
+  image(img8, width/2, height/2);
+  popMatrix();
+}
+void drawScene09() {
+  pushMatrix();
+  rotateY(frameCount*0.02);
+  image(img9, width/2, height/2);
+  popMatrix();
+}
+void drawScene10() { 
+  pushMatrix();
+  rotateY(frameCount*0.02);
+  image(img10, width/2, height/2);
+  popMatrix();
+}
+void drawScene11() { 
+  pushMatrix();
+  translate(width/2,height/2);
+  scale(-s);
+  image(img11, 0, 0);
+  popMatrix();
+  }
+void drawScene12() { 
+  pushMatrix();
+  translate(25,75);
+  a+=0.9;
+  float x = noise(a)*noiseScale;
+  image(img12, (width/2)+x, (height/2)+x);
+  popMatrix();
+} 
+void drawScene13() { 
+  pushMatrix();
+  translate(75,75);
+  a+=0.9;
+  float x = noise(a)*noiseScale;
+  image(img13, (width/2)+x, (height/2)+x);
+  popMatrix();
+}
+void drawScene14() { 
+  pushMatrix();
+  translate(125,75);
+  a+=0.9;
+  float x = noise(a)*noiseScale;
+  image(img14, (width/2)+x, (height/2)+x);
+  popMatrix();
+}
+void drawScene15() { 
+  pushMatrix();
+  translate(400,75);
+  a+=0.9;
+  float x = noise(a)*noiseScale;
+  image(img15, (width/2)+x, (height/2)+x);
+  popMatrix();
+}
+void drawScene16() {
+  pushMatrix();
+  translate(500,75); 
+  a+=0.9;
+  float x = noise(a)*noiseScale;
+  image(img16, (width/2)+x, (height/2)+x);
+  popMatrix();
+}
+void drawScene17() { 
+  pushMatrix();
+  a+=0.9;
+  float x = noise(a)*noiseScale;
+  translate(width/2,height/2);
+  image(img17, 0+x, 0+x);
+  popMatrix();
+}
+void drawScene18() { 
+  pushMatrix();
+  rotateY(frameCount*0.03); 
+  image(img18, width/2, height/2);
+  popMatrix();
+}
+void drawScene19() { 
+  pushMatrix();
+  rotateY(frameCount*0.03);
+  image(img19, width/2, height/2);
+  popMatrix();
+}
+void drawScene20() { 
+  pushMatrix();
+  rotateY(frameCount*0.03);
+  image(img20, width/2, height/2);
+  popMatrix();
+}
+void drawScene21() { 
+  pushMatrix();
+  rotateZ(frameCount*0.02); 
+  image(img21, width/2, height/2);
+  popMatrix();
+}
+void drawScene22() { 
+  pushMatrix();
+  rotateZ(frameCount*0.02);  
+  image(img22, width/2, height/2);
+  popMatrix();
+}
+void drawScene23() { 
+  pushMatrix();
+  rotateZ(frameCount*0.02); 
+  image(img23, width/2, height/2);
+  popMatrix(); 
+}
